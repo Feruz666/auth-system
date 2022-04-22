@@ -6,23 +6,24 @@ import (
 	"os"
 	"testing"
 
+	"github.com/Feruz666/auth-system/util"
 	_ "github.com/lib/pq"
 )
 
 var testQueries *Queries
-
-const (
-	dbDriver = "postgres"
-	dbSource = "postgres://root:secret@localhost:5435/users?sslmode=disable"
-)
+var testDB *sql.DB
 
 func TestMain(m *testing.M) {
-	conn, err := sql.Open(dbDriver, dbSource)
+	config, err := util.LoadConfig("../..")
+	if err != nil {
+		log.Fatal("cannot load config:", err)
+	}
+	testDB, err = sql.Open(config.DBDriver, config.DBSource)
 	if err != nil {
 		log.Fatal("cannot connect to DB:", err)
 	}
 
-	testQueries = New(conn)
+	testQueries = New(testDB)
 
 	os.Exit(m.Run())
 }

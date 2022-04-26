@@ -1,27 +1,45 @@
 package api
 
 import (
+	"fmt"
+
 	db "github.com/Feruz666/auth-system/db/sqlc"
+	"github.com/Feruz666/auth-system/token"
+	"github.com/Feruz666/auth-system/util"
 	"github.com/gin-gonic/gin"
 )
 
 // Server serves HTTP requests
 type Server struct {
-	store  db.Store
-	router *gin.Engine
+	config     util.Config
+	store      db.Store
+	tokenMaker token.Maker
+	router     *gin.Engine
 }
 
 // NewServer creates a new HTTP server and setup routing
-func NewServer(store db.Store) *Server {
-	server := &Server{store: store}
-	router := gin.Default()
+func NewServer(config util.Config, store db.Store) (*Server, error) {
+	tokenMaker, err := token.NewJWTMaker(config.TokenSecretKey)
+	if err != nil {
+		return nil, fmt.Errorf("cannot create token maker: %w", err)
+	}
+	server := &Server{
+		config:     config,
+		store:      store,
+		tokenMaker: tokenMaker,
+	}
+	server.setupRouter()
+	return server, nil
+}
 
+func (server *Server) setupRouter() {
+	router := gin.Default()
 	router.POST("/users", server.createUser)
+	router.POST("/users/login", server.loginUser)
+
 	router.GET("/users", server.listUser)
 	router.GET("/users/:id", server.getUser)
-
 	server.router = router
-	return server
 }
 
 // Start runs

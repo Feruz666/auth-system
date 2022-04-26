@@ -173,13 +173,13 @@ func TestCreateUserAPI(t *testing.T) {
 		tc := testCases[i]
 
 		t.Run(tc.name, func(t *testing.T) {
-			ctrls := gomock.NewController(t)
-			defer ctrls.Finish()
+			ctrl := gomock.NewController(t)
+			defer ctrl.Finish()
 
-			store := mockdb.NewMockStore(ctrls)
+			store := mockdb.NewMockStore(ctrl)
 			tc.buildStubs(store)
-			// start test server and send request
-			server := NewServer(store)
+
+			server := newTestServer(t, store)
 			recorder := httptest.NewRecorder()
 
 			// Marshal body data to json

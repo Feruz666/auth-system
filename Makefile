@@ -1,5 +1,5 @@
 postgres:
-	docker run --name authdb -p 5435:5432 -e POSTGRES_USER=root -e POSTGRES_PASSWORD=secret -d umberman/postgres:latest
+	docker run --name authdb --network auth-system-network -p 5435:5432 -e POSTGRES_USER=root -e POSTGRES_PASSWORD=secret -d umberman/postgres:latest
 
 createdb:
 	docker exec -it authdb createdb --username=root --owner=root users

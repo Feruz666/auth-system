@@ -29,6 +29,6 @@ image:
 	docker build -t auth-system-api:latest .
 
 containerup:
-	docker run --name auth-system-api --network neuromaps-network -p 8080:8080 -e GIN_MODE=release -e DB_SOURCE="postgres://root:secret@authdb:5432/users?sslmode=disable" auth-system-api:latest
+	docker run --name auth-system-api --network neuromaps-network -p 3002:3002 -e GIN_MODE=release -e DB_SOURCE="postgres://root:secret@authdb:5432/users?sslmode=disable" auth-system-api:latest
 
 .PHONY: createdb dropdb postgres migrateup migratedown sqlc test server mock

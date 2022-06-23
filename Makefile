@@ -13,6 +13,9 @@ migrateup:
 migratedown:
 	migrate -path db/migration -database "postgres://root:secret@localhost:5432/users?sslmode=disable" -verbose down
 
+mgrt:
+	migrate create -ext sql -dir db/migration -seq add_sessions
+
 sqlc:
 	sqlc generate
 	
@@ -31,4 +34,4 @@ image:
 containerup:
 	docker run --name auth-system-api --network neuromaps-network -p 3002:3002 -e GIN_MODE=release -e DB_SOURCE="postgres://root:secret@authdb:5432/users?sslmode=disable" auth-system-api:latest
 
-.PHONY: createdb dropdb postgres migrateup migratedown sqlc test server mock
+.PHONY: createdb dropdb postgres migrateup migratedown sqlc test server mock mgrt

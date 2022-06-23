@@ -9,33 +9,25 @@ import (
 
 const createUser = `-- name: CreateUser :one
 INSERT INTO users (
-  username,
-  hashed_password,
   full_name,
-  email
+  email,
+  hashed_password
 ) VALUES (
-  $1, $2, $3, $4
-) RETURNING id, username, full_name, email, hashed_password, password_changed_at, created_at
+  $1, $2, $3
+) RETURNING id, full_name, email, hashed_password, password_changed_at, created_at
 `
 
 type CreateUserParams struct {
-	Username       string `json:"username"`
-	HashedPassword string `json:"hashed_password"`
 	FullName       string `json:"full_name"`
 	Email          string `json:"email"`
+	HashedPassword string `json:"hashed_password"`
 }
 
 func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (User, error) {
-	row := q.db.QueryRowContext(ctx, createUser,
-		arg.Username,
-		arg.HashedPassword,
-		arg.FullName,
-		arg.Email,
-	)
+	row := q.db.QueryRowContext(ctx, createUser, arg.FullName, arg.Email, arg.HashedPassword)
 	var i User
 	err := row.Scan(
 		&i.ID,
-		&i.Username,
 		&i.FullName,
 		&i.Email,
 		&i.HashedPassword,
@@ -56,7 +48,7 @@ func (q *Queries) DeleteUser(ctx context.Context, id int64) error {
 }
 
 const getUser = `-- name: GetUser :one
-SELECT id, username, full_name, email, hashed_password, password_changed_at, created_at FROM users
+SELECT id, full_name, email, hashed_password, password_changed_at, created_at FROM users
 WHERE id = $1 LIMIT 1
 `
 
@@ -65,7 +57,6 @@ func (q *Queries) GetUser(ctx context.Context, id int64) (User, error) {
 	var i User
 	err := row.Scan(
 		&i.ID,
-		&i.Username,
 		&i.FullName,
 		&i.Email,
 		&i.HashedPassword,
@@ -75,17 +66,35 @@ func (q *Queries) GetUser(ctx context.Context, id int64) (User, error) {
 	return i, err
 }
 
-const getUserByUsername = `-- name: GetUserByUsername :one
-SELECT id, username, full_name, email, hashed_password, password_changed_at, created_at FROM users
-WHERE username = $1 LIMIT 1
+const getUserByEmail = `-- name: GetUserByEmail :one
+SELECT id, full_name, email, hashed_password, password_changed_at, created_at FROM users
+WHERE email = $1 LIMIT 1
 `
 
-func (q *Queries) GetUserByUsername(ctx context.Context, username string) (User, error) {
-	row := q.db.QueryRowContext(ctx, getUserByUsername, username)
+func (q *Queries) GetUserByEmail(ctx context.Context, email string) (User, error) {
+	row := q.db.QueryRowContext(ctx, getUserByEmail, email)
 	var i User
 	err := row.Scan(
 		&i.ID,
-		&i.Username,
+		&i.FullName,
+		&i.Email,
+		&i.HashedPassword,
+		&i.PasswordChangedAt,
+		&i.CreatedAt,
+	)
+	return i, err
+}
+
+const getUserByFullName = `-- name: GetUserByFullName :one
+SELECT id, full_name, email, hashed_password, password_changed_at, created_at FROM users
+WHERE full_name = $1 LIMIT 1
+`
+
+func (q *Queries) GetUserByFullName(ctx context.Context, fullName string) (User, error) {
+	row := q.db.QueryRowContext(ctx, getUserByFullName, fullName)
+	var i User
+	err := row.Scan(
+		&i.ID,
 		&i.FullName,
 		&i.Email,
 		&i.HashedPassword,
@@ -96,7 +105,7 @@ func (q *Queries) GetUserByUsername(ctx context.Context, username string) (User,
 }
 
 const listUsers = `-- name: ListUsers :many
-SELECT id, username, full_name, email, hashed_password, password_changed_at, created_at FROM users
+SELECT id, full_name, email, hashed_password, password_changed_at, created_at FROM users
 ORDER BY id
 LIMIT $1
 OFFSET $2
@@ -118,7 +127,6 @@ func (q *Queries) ListUsers(ctx context.Context, arg ListUsersParams) ([]User, e
 		var i User
 		if err := rows.Scan(
 			&i.ID,
-			&i.Username,
 			&i.FullName,
 			&i.Email,
 			&i.HashedPassword,
@@ -142,7 +150,7 @@ const updateUser = `-- name: UpdateUser :one
 UPDATE users
 SET hashed_password = $2
 WHERE id = $1
-RETURNING id, username, full_name, email, hashed_password, password_changed_at, created_at
+RETURNING id, full_name, email, hashed_password, password_changed_at, created_at
 `
 
 type UpdateUserParams struct {
@@ -155,7 +163,6 @@ func (q *Queries) UpdateUser(ctx context.Context, arg UpdateUserParams) (User, e
 	var i User
 	err := row.Scan(
 		&i.ID,
-		&i.Username,
 		&i.FullName,
 		&i.Email,
 		&i.HashedPassword,

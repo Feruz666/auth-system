@@ -40,3 +40,7 @@ func RandomUser() string {
 func RandomEmail() string {
 	return fmt.Sprintf("%s@email.com", RandomString(6))
 }
+
+func RandomUserId() int64 {
+	return RandomInt(1, 1000)
+}

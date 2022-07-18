@@ -3,6 +3,7 @@ package api
 import (
 	"database/sql"
 	"net/http"
+	"strconv"
 	"time"
 
 	db "github.com/Feruz666/auth-system/db/sqlc"
@@ -107,7 +108,7 @@ func (server *Server) loginUser(ctx *gin.Context) {
 	}
 
 	accessToken, accessPayload, err := server.tokenMaker.CreateToken(
-		user.Email,
+		user.ID,
 		server.config.AccessTokenDuration,
 	)
 	if err != nil {
@@ -116,7 +117,7 @@ func (server *Server) loginUser(ctx *gin.Context) {
 	}
 
 	refreshToken, refreshPayload, err := server.tokenMaker.CreateToken(
-		user.Email,
+		user.ID,
 		server.config.RefreshTokenDuration,
 	)
 	if err != nil {
@@ -146,6 +147,8 @@ func (server *Server) loginUser(ctx *gin.Context) {
 		RefreshTokenExpiresAt: refreshPayload.ExpiredAt,
 		User:                  newUserResponse(user),
 	}
+	ctx.Header("user_id", strconv.Itoa(int(user.ID)))
+	// ctx.Request.Response.Header.Add("user_id", strconv.Itoa(int(user.ID)))
 	ctx.JSON(http.StatusOK, rsp)
 }
 

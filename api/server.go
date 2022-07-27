@@ -2,6 +2,7 @@ package api
 
 import (
 	"fmt"
+	"time"
 
 	db "github.com/Feruz666/auth-system/db/sqlc"
 	document "github.com/Feruz666/auth-system/pkg/document/handlers"
@@ -9,6 +10,7 @@ import (
 	"github.com/Feruz666/auth-system/token"
 	"github.com/Feruz666/auth-system/util"
 	"github.com/gin-gonic/gin"
+	cors "github.com/itsjamie/gin-cors"
 )
 
 // Server serves HTTP requests
@@ -36,6 +38,18 @@ func NewServer(config util.Config, store db.Store) (*Server, error) {
 
 func (server *Server) setupRouter() {
 	router := gin.Default()
+
+	// Apply the middleware to the router (works with groups too)
+	router.Use(cors.Middleware(cors.Config{
+		Origins:         "*",
+		Methods:         "GET, PUT, POST, DELETE",
+		RequestHeaders:  "Origin, Authorization, Content-Type",
+		ExposedHeaders:  "",
+		MaxAge:          50 * time.Second,
+		Credentials:     false,
+		ValidateHeaders: false,
+	}))
+
 	router.POST("/users", server.createUser)
 	router.POST("/users/login", server.loginUser)
 

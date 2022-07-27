@@ -29,7 +29,7 @@ mock:
 	mockgen -package mockdb -destination db/mock/store.go github.com/Feruz666/auth-system/db/sqlc Store
 
 image:
-	docker build -t auth-system-api:latest .
+	docker build -t umberman/auth_service:1.0 .
 
 containerup:
 	docker run --name auth-system-api --network neuromaps-network -p 3002:3002 -e GIN_MODE=release -e DB_SOURCE="postgres://root:secret@authdb:5432/users?sslmode=disable" auth-system-api:latest

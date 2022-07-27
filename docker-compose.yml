@@ -6,6 +6,8 @@ services:
       - POSTGRES_USER=root
       - POSTGRES_PASSWORD=secret
       - POSTGRES_DB=users
+    volumes:
+      - pgdata:/var/lib/postgresql/data
   api:
     image: umberman/auth_service:1.0
     container_name: auth-system-api-1
@@ -13,9 +15,11 @@ services:
       context: .
       dockerfile: Dockerfile
     ports:
-      - "3002:3002"
+      - "8000:8000"
     environment:
       - DB_SOURCE=postgresql://root:secret@postgres:5432/users?sslmode=disable
+      - MAPS_SYSTEM_ADDRESS=http://geoserver-service:3001
+      - SENSORS_SYSTEM_ADDRESS=http://sensors-backend:3004
     depends_on:
       - postgres
     entrypoint: ["/app/wait-for.sh", "postgres:5432", "--", "/app/start.sh"]
@@ -24,3 +28,6 @@ networks:
   default:
     external:
       name: neuromaps-network
+
+volumes: 
+     pgdata:

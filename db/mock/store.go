@@ -36,6 +36,21 @@ func (m *MockStore) EXPECT() *MockStoreMockRecorder {
 	return m.recorder
 }
 
+// CreateLayer mocks base method.
+func (m *MockStore) CreateLayer(arg0 context.Context, arg1 db.CreateLayerParams) (db.Layer, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "CreateLayer", arg0, arg1)
+	ret0, _ := ret[0].(db.Layer)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// CreateLayer indicates an expected call of CreateLayer.
+func (mr *MockStoreMockRecorder) CreateLayer(arg0, arg1 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateLayer", reflect.TypeOf((*MockStore)(nil).CreateLayer), arg0, arg1)
+}
+
 // CreateSession mocks base method.
 func (m *MockStore) CreateSession(arg0 context.Context, arg1 db.CreateSessionParams) (db.Session, error) {
 	m.ctrl.T.Helper()
@@ -138,6 +153,36 @@ func (m *MockStore) GetUserByFullName(arg0 context.Context, arg1 string) (db.Use
 func (mr *MockStoreMockRecorder) GetUserByFullName(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetUserByFullName", reflect.TypeOf((*MockStore)(nil).GetUserByFullName), arg0, arg1)
+}
+
+// GetUserByUsername mocks base method.
+func (m *MockStore) GetUserByUsername(arg0 context.Context, arg1 string) (db.User, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetUserByUsername", arg0, arg1)
+	ret0, _ := ret[0].(db.User)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetUserByUsername indicates an expected call of GetUserByUsername.
+func (mr *MockStoreMockRecorder) GetUserByUsername(arg0, arg1 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetUserByUsername", reflect.TypeOf((*MockStore)(nil).GetUserByUsername), arg0, arg1)
+}
+
+// ListLayer mocks base method.
+func (m *MockStore) ListLayer(arg0 context.Context, arg1 db.ListLayerParams) ([]db.Layer, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "ListLayer", arg0, arg1)
+	ret0, _ := ret[0].([]db.Layer)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// ListLayer indicates an expected call of ListLayer.
+func (mr *MockStoreMockRecorder) ListLayer(arg0, arg1 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListLayer", reflect.TypeOf((*MockStore)(nil).ListLayer), arg0, arg1)
 }
 
 // ListUsers mocks base method.

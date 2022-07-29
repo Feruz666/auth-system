@@ -123,3 +123,8 @@ func GetMapsConfig() string {
 func GetWMS(ctx *gin.Context) {
 	util.GetWMSGateWayURL(url+"/0.0/wms", ctx)
 }
+
+
+func GetUsersLayers(ctx gin.Context) {
+	
+}

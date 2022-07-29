@@ -55,8 +55,17 @@ func (server *Server) setupRouter() {
 	router.POST("/users/login", server.loginUser)
 	router.POST("/token/refresh", server.renewAccessToken)
 
-
 	authRoutes := router.Group("/").Use(authMiddleware(server.tokenMaker))
+
+	authRoutes.Use(cors.Middleware(cors.Config{
+		Origins:         "*",
+		Methods:         "GET, PUT, POST, DELETE",
+		RequestHeaders:  "Origin, Authorization, Content-Type",
+		ExposedHeaders:  "",
+		MaxAge:          50 * time.Second,
+		Credentials:     false,
+		ValidateHeaders: false,
+	}))
 
 	authRoutes.GET("/users", server.listUser)
 	authRoutes.GET("/users/:id", server.getUser)

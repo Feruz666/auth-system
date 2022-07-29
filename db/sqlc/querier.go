@@ -9,6 +9,7 @@ import (
 )
 
 type Querier interface {
+	CreateLayer(ctx context.Context, arg CreateLayerParams) (Layer, error)
 	CreateSession(ctx context.Context, arg CreateSessionParams) (Session, error)
 	CreateUser(ctx context.Context, arg CreateUserParams) (User, error)
 	DeleteUser(ctx context.Context, id int64) error
@@ -16,6 +17,8 @@ type Querier interface {
 	GetUser(ctx context.Context, id int64) (User, error)
 	GetUserByEmail(ctx context.Context, email string) (User, error)
 	GetUserByFullName(ctx context.Context, fullName string) (User, error)
+	GetUserByUsername(ctx context.Context, email string) (User, error)
+	ListLayer(ctx context.Context, arg ListLayerParams) ([]Layer, error)
 	ListUsers(ctx context.Context, arg ListUsersParams) ([]User, error)
 	UpdateUser(ctx context.Context, arg UpdateUserParams) (User, error)
 }

@@ -8,6 +8,13 @@ import (
 	"github.com/google/uuid"
 )
 
+type Layer struct {
+	ID       int64  `json:"id"`
+	Username string `json:"username"`
+	Date     string `json:"date"`
+	Layer    string `json:"layer"`
+}
+
 type Session struct {
 	SessionID    uuid.UUID `json:"session_id"`
 	UserID       int64     `json:"user_id"`
@@ -26,4 +33,5 @@ type User struct {
 	HashedPassword    string    `json:"hashed_password"`
 	PasswordChangedAt time.Time `json:"password_changed_at"`
 	CreatedAt         time.Time `json:"created_at"`
+	Username          string    `json:"username"`
 }

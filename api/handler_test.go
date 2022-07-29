@@ -61,11 +61,13 @@ func TestCreateUserAPI(t *testing.T) {
 			body: gin.H{
 				"password":  password,
 				"full_name": user.FullName,
+				"username":  user.Username,
 				"email":     user.Email,
 			},
 			buildStubs: func(store *mockdb.MockStore) {
 				arg := db.CreateUserParams{
 					FullName: user.FullName,
+					Username: user.Username,
 					Email:    user.Email,
 				}
 				store.EXPECT().
@@ -83,6 +85,7 @@ func TestCreateUserAPI(t *testing.T) {
 			body: gin.H{
 				"password":  password,
 				"full_name": user.FullName,
+				"username":  user.Username,
 				"email":     user.Email,
 			},
 			buildStubs: func(store *mockdb.MockStore) {
@@ -100,6 +103,7 @@ func TestCreateUserAPI(t *testing.T) {
 			body: gin.H{
 				"password":  password,
 				"full_name": user.FullName,
+				"username":  user.Username,
 				"email":     "invalid-email",
 			},
 			buildStubs: func(store *mockdb.MockStore) {
@@ -116,6 +120,7 @@ func TestCreateUserAPI(t *testing.T) {
 			body: gin.H{
 				"password":  "123",
 				"full_name": user.FullName,
+				"username":  user.Username,
 				"email":     user.Email,
 			},
 			buildStubs: func(store *mockdb.MockStore) {
@@ -132,6 +137,7 @@ func TestCreateUserAPI(t *testing.T) {
 			body: gin.H{
 				"password":  password,
 				"full_name": user.FullName,
+				"username":  user.Username,
 				"email":     user.Email,
 			},
 			buildStubs: func(store *mockdb.MockStore) {
@@ -181,6 +187,7 @@ func randomUser(t *testing.T) (user db.User, password string) {
 	user = db.User{
 		ID:             util.RandomInt(1, 50),
 		FullName:       util.RandomUser(),
+		Username:       util.RandomUser(),
 		Email:          util.RandomEmail(),
 		HashedPassword: hashPassword,
 	}
@@ -196,6 +203,7 @@ func requireBodyMatchuser(t *testing.T, body *bytes.Buffer, user db.User) {
 
 	require.NoError(t, err)
 	require.Equal(t, user.FullName, gotUser.FullName)
+	require.Equal(t, user.Username, gotUser.Username)
 	require.Equal(t, user.Email, gotUser.Email)
 	require.Empty(t, gotUser.HashedPassword)
 }

@@ -194,3 +194,6 @@ func GetWMSGateWayURL(url string, ctx *gin.Context) {
 func ErrorResponce(err error) gin.H {
 	return gin.H{"error": err.Error()}
 }
+
+
+

@@ -28,10 +28,11 @@ type Session struct {
 
 type User struct {
 	ID                int64     `json:"id"`
+	Username          string    `json:"username"`
 	FullName          string    `json:"full_name"`
 	Email             string    `json:"email"`
 	HashedPassword    string    `json:"hashed_password"`
 	PasswordChangedAt time.Time `json:"password_changed_at"`
 	CreatedAt         time.Time `json:"created_at"`
-	Username          string    `json:"username"`
+	Organization      string    `json:"organization"`
 }

@@ -4,6 +4,3 @@ CREATE TABLE "layers" (
   "date" varchar NOT NULL,
   "layer" varchar NOT NULL
 );
-
-
-ALTER TABLE "users" ADD COLUMN "username" VARCHAR NOT NULL;

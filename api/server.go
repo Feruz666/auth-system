@@ -55,6 +55,11 @@ func (server *Server) setupRouter() {
 	router.POST("/users/login", server.loginUser)
 	router.POST("/token/refresh", server.renewAccessToken)
 
+	// Sensors route
+	router.POST("/sensors", sensors.CreateSensor)
+	router.GET("/sensors", sensors.GetSensors)
+	router.GET("/sensors/charts", sensors.GetSensorsCharts)
+
 	authRoutes := router.Group("/").Use(authMiddleware(server.tokenMaker))
 
 	authRoutes.GET("/users", server.listUser)
@@ -62,11 +67,6 @@ func (server *Server) setupRouter() {
 
 	// documents
 	authRoutes.POST("/doc", document.Example)
-
-	// Sensors route
-	authRoutes.POST("/sensors", sensors.CreateSensor)
-	authRoutes.GET("/sensors", sensors.GetSensors)
-	authRoutes.GET("/sensors/charts", sensors.GetSensorsCharts)
 
 	// Maps route
 	router.GET("/maps/workspaces", maps.GetWorkspaces)

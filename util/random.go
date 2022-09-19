@@ -37,6 +37,10 @@ func RandomUser() string {
 	return RandomString(6)
 }
 
+func RandomOrganization() string {
+	return RandomString(10)
+}
+
 func RandomEmail() string {
 	return fmt.Sprintf("%s@email.com", RandomString(6))
 }

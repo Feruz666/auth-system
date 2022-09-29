@@ -187,13 +187,10 @@ func GetWMSGateWayURL(url string, ctx *gin.Context) {
 	ctx.Header("Access-Control-Allow-Methods", "GET, PUT, POST, DELETE")
 	ctx.Header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")
 	ctx.Writer.WriteHeader(http.StatusOK)
-	ctx.Writer.Write(body) 
+	ctx.Writer.Write(body)
 }
 
 // ErrorResponce ...
 func ErrorResponce(err error) gin.H {
 	return gin.H{"error": err.Error()}
 }
-
-
-

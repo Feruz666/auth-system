@@ -90,6 +90,7 @@ func (server *Server) setupRouter() {
 	router.GET("/maps/styles", maps.MirrorGET)
 	router.GET("/maps/coverage/dir", maps.MirrorGET)
 	router.GET("/maps/coverage/info", maps.MirrorGET)
+	router.GET("/maps/coverage/layers", maps.MirrorGET)
 
 	server.router = router
 }

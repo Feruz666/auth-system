@@ -42,6 +42,14 @@ func GetMapsConfig() string {
 	return config.MAPS_SYSTEM_ADDRESS
 }
 
+func CreateCoverageStore(ctx *gin.Context) {
+	util.PostGateWayUrl(url+"/0.0/coverage/coveragestore", ctx)
+}
+
+func PublishCoverageLayer(ctx *gin.Context) {
+	util.PostGateWayUrl(url+"/0.0/coverage/publish", ctx)
+}
+
 func MirrorGET(ctx *gin.Context) {
 	requestURL := ctx.Request.URL.String()
 	util.GetGateWayUrl(url+"/0.0"+requestURL[5:], ctx)

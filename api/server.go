@@ -91,6 +91,8 @@ func (server *Server) setupRouter() {
 	router.GET("/maps/coverage/dir", maps.MirrorGET)
 	router.GET("/maps/coverage/info", maps.MirrorGET)
 	router.GET("/maps/coverage/layers", maps.MirrorGET)
+	router.POST("/maps/coverage/coveragestore", maps.CreateCoverageStore)
+	router.POST("/maps/coverage/publish", maps.PublishCoverageLayer)
 
 	server.router = router
 }

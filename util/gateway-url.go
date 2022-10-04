@@ -35,7 +35,7 @@ func PostGateWayUrl(url string, ctx *gin.Context) {
 
 	jsonData := make(map[string]interface{})
 	json.Unmarshal([]byte(string(b)), &jsonData)
-	ctx.Header("Access-Control-Allow-Origin", "*")
+
 	ctx.JSON(resp.StatusCode, jsonData)
 }
 

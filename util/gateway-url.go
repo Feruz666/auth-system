@@ -8,6 +8,7 @@ import (
 	"io"
 	"io/ioutil"
 	"net/http"
+	"strconv"
 )
 
 func PostGateWayUrl(url string, ctx *gin.Context) {
@@ -108,4 +109,56 @@ func DeleteGateWayUrl(url string, ctx *gin.Context) {
 // ErrorResponce ...
 func ErrorResponce(err error) gin.H {
 	return gin.H{"error": err.Error()}
+}
+
+func GetWMSGateWayURL(url string, ctx *gin.Context) {
+
+	data, err := ctx.GetRawData()
+	if err != nil {
+		ctx.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{
+			"error": "request to wms service error",
+		})
+
+		return
+	}
+	responseBody := bytes.NewBuffer(data)
+	if responseBody == nil {
+		responseBody = nil
+	}
+
+	client := &http.Client{}
+	req, err := http.NewRequest(
+		"GET", url, responseBody,
+	)
+
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	req.Header.Add("Accept", "text/html") // добавляем заголовок Accept
+
+	resp, err := client.Do(req)
+	if err != nil {
+		ctx.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{
+			"error": "request to wms service error",
+		})
+
+		return
+	}
+
+	defer resp.Body.Close()
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		ctx.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{
+			"error": "request to wms service error",
+		})
+
+		return
+	}
+
+	ctx.Header("Content-Type", "image/png")
+	ctx.Header("Content-Length", strconv.Itoa(len(body)))
+	ctx.Writer.WriteHeader(http.StatusOK)
+	ctx.Writer.Write(body)
 }

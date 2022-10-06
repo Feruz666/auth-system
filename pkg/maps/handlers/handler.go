@@ -54,3 +54,8 @@ func MirrorGET(ctx *gin.Context) {
 	requestURL := ctx.Request.URL.String()
 	util.GetGateWayUrl(url+"/0.0"+requestURL[5:], ctx)
 }
+
+func MirrorWMS(ctx *gin.Context) {
+	requestURL := ctx.Request.URL.String()
+	util.GetWMSGateWayURL(url+"/0.0"+requestURL[5:], ctx)
+}

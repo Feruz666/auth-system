@@ -86,7 +86,7 @@ func (server *Server) setupRouter() {
 	router.GET("/maps/featuretypes", maps.MirrorGET)
 	router.GET("/maps/featuretypes/featuretype", maps.MirrorGET)
 	router.DELETE("/maps/featuretypes/featuretype", maps.DeleteFeatureType)
-	router.GET("/maps/wms", maps.MirrorGET)
+	router.GET("/maps/wms", maps.MirrorWMS)
 	router.GET("/maps/styles", maps.MirrorGET)
 	router.GET("/maps/coverage/dir", maps.MirrorGET)
 	router.GET("/maps/coverage/info", maps.MirrorGET)

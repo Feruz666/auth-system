@@ -113,6 +113,7 @@ func (server *Server) loginUser(ctx *gin.Context) {
 
 	accessToken, accessPayload, err := server.tokenMaker.CreateToken(
 		user.ID,
+		user.Organization,
 		server.config.AccessTokenDuration,
 	)
 	if err != nil {
@@ -122,6 +123,7 @@ func (server *Server) loginUser(ctx *gin.Context) {
 
 	refreshToken, refreshPayload, err := server.tokenMaker.CreateToken(
 		user.ID,
+		user.Organization,
 		server.config.RefreshTokenDuration,
 	)
 	if err != nil {
@@ -204,4 +206,20 @@ func (server *Server) getUser(ctx *gin.Context) {
 	}
 
 	ctx.JSON(http.StatusOK, user)
+}
+
+func (server *Server) getUserByToken(ctx *gin.Context) {
+	token := ctx.PostForm("token")
+	if token == "" {
+		ctx.String(http.StatusBadRequest, "Token not provided")
+		return
+	}
+
+	payload, err := server.tokenMaker.VerifyToken(token)
+	if err != nil {
+		ctx.AbortWithStatusJSON(http.StatusUnauthorized, errorResponse(err))
+		return
+	}
+
+	ctx.JSON(http.StatusOK, payload)
 }

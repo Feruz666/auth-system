@@ -10,7 +10,7 @@ services:
       - pgdata:/var/lib/postgresql/data
   api:
     image: umberman/auth_service:1.0
-    container_name: auth-system-api-1
+    container_name: neuromaps-auth-system
     build: 
       context: .
       dockerfile: Dockerfile
